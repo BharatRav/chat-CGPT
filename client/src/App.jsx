@@ -9,6 +9,7 @@ import bot from "./assets/bot.png";
 //   { type: "user", post: "Hello my name is Bharat" },
 //   { type: "bot", post: "Hello Bharat, How can i assist you?" },
 // ];
+
 function App() {
   const [input, setInput] = useState("");
   const [posts, setPosts] = useState([]);
@@ -29,16 +30,6 @@ function App() {
     return data;
   };
 
-  const onSubmit = () => {
-    if (input.trim() === "") return;
-    updatePosts(input);
-    updatePosts("loading...", false, true);
-    setInput("");
-    fetchBotResponse().then((res) => {
-      console.log(res);
-      updatePosts(res.bot.trim(), true);
-    });
-  };
   const autoTypingBotResponse = (text) => {
     let index = 0;
     let interval = setInterval(() => {
@@ -64,6 +55,17 @@ function App() {
       }
     }, 40);
   };
+
+  const onSubmit = () => {
+    if (input.trim() === "") return;
+    updatePosts(input);
+    updatePosts("loading...", false, true);
+    setInput("");
+    fetchBotResponse().then((res) => {
+      console.log(res.bot.trim());
+      updatePosts(res.bot.trim(), true);
+    });
+  };
   const updatePosts = (post, isBot, isLoading) => {
     if (isBot) {
       autoTypingBotResponse(post);
@@ -73,10 +75,12 @@ function App() {
       });
     }
   };
+
   const onKeyUp = (e) => {
     // console.log(e);
     if (e.key === "Enter" || e.code === "Enter" || e.which === 13) onSubmit();
   };
+
   return (
     <>
       {/* <h1>Hello guys</h1> */}
@@ -132,4 +136,3 @@ function App() {
 }
 
 export default App;
-
